@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Aqua Niyor placeholder mark">
+  <defs>
+    <linearGradient id="an-gold" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#e8d7b4"/>
+      <stop offset="0.55" stop-color="#cbb083"/>
+      <stop offset="1" stop-color="#a8894f"/>
+    </linearGradient>
+  </defs>
+  <!-- droplet, drawn as a hairline in champagne gold -->
+  <path d="M32 6c8.4 11.4 15.6 19.4 15.6 28.4C47.6 44.9 40.6 52.6 32 52.6s-15.6-7.7-15.6-18.2C16.4 25.4 23.6 17.4 32 6z"
+        fill="none" stroke="url(#an-gold)" stroke-width="1.6"/>
+  <!-- inner fill line suggesting water level -->
+  <path d="M17.2 36.5c4.6 2.1 9.2-1.4 14.8-1.4s10.2 3.5 14.8 1.4"
+        fill="none" stroke="#7fd4e8" stroke-width="1.2" opacity=".8"/>
+  <!-- highlight -->
+  <path d="M26.5 22.5c-2.6 3.8-4.4 7.4-4.9 10.8" fill="none" stroke="#e8d7b4" stroke-width="1.1" opacity=".55" stroke-linecap="round"/>
+</svg>
