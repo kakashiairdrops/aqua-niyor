@@ -8,9 +8,16 @@ export const BRAND = {
   city: 'Nagaon, Assam',
 
   // --- swap the logo here -------------------------------------
-  // Drop your logo file into  assets/  and point this at it,
-  // e.g.  logo: 'assets/logo.png'   (PNG / SVG / WebP all work)
-  logo: 'assets/logo.svg',
+  // Drop your logo file into  assets/  and point this at it.
+  // logo     = the full lockup (droplet + wordmark), used in the
+  //            header and the loading screen
+  // logoMark = the droplet on its own, used for the favicon and
+  //            the 3D bottle label; falls back to logo if unset
+  logo: 'assets/logo.png',
+  logoMark: 'assets/logo-mark.png',
+
+  // the blue sampled from the logo artwork — the site's accent
+  color: '#0289ca',
 
   phone: '+91 91010 33546',
   phoneDial: '+919101033546',
@@ -32,7 +39,6 @@ export const PRODUCTS = [
     name: 'Aqua Niyor 500 ml',
     blurb: 'The slender format. Laid at each place setting, carried through meetings, handed out at gatherings.',
     bottlesPerCrate: 24,
-    accent: '#22d3ee',
     slabs: [
       { min: 1,   max: 29,       rate: 125 },
       { min: 30,  max: 50,       rate: 115 },
@@ -46,7 +52,6 @@ export const PRODUCTS = [
     name: 'Aqua Niyor 700 ml',
     blurb: 'The everyday bottle. Sized for the counter, the office desk and the long afternoon.',
     bottlesPerCrate: 24,
-    accent: '#2f9dff',
     slabs: [
       { min: 1,   max: 29,       rate: 130 },
       { min: 30,  max: 50,       rate: 120 },

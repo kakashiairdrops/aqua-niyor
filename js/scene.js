@@ -1,17 +1,20 @@
 /* =============================================================
    3D hero — a crystal bottle on a dark stage, lit like a still life.
-   Champagne key light, cool fill, gold label type drawn at runtime.
+   Cool key light, brand-blue accents, and the real logo printed
+   onto the label at runtime.
    Built on three.js (vendored, no CDN needed at runtime).
    ============================================================= */
 import * as THREE from '../vendor/three.module.js';
+import { BRAND } from './config.js';
 
 /* palette shared with the CSS theme */
 const C = {
   void: 0x05070d,
-  gold: 0xcbb083,
-  goldLt: 0xe8d7b4,
+  brand: 0x0289ca,     // the logo blue
+  brandLt: 0x56bce8,
+  brandDp: 0x015f8f,
   plat: 0xdfe7ef,
-  aqua: 0x7fd4e8,
+  ice: 0xa8ddf2,
   ink: 0x0b1220,
 };
 
@@ -31,22 +34,22 @@ export function initScene(canvasHost) {
   renderer.toneMappingExposure = 1.02;   // restrained, filmic
   canvasHost.appendChild(renderer.domElement);
 
-  /* ---------------- lighting: one warm key, one cool fill ---------------- */
+  /* ---------------- lighting: cool key, warm-neutral fill ---------------- */
   scene.add(new THREE.HemisphereLight(0xa8c4dd, 0x05070d, 0.5));
 
-  const key = new THREE.DirectionalLight(0xfff4e0, 2.1);   // champagne key
+  const key = new THREE.DirectionalLight(0xf2fbff, 2.2);    // clean white key
   key.position.set(4.5, 6.5, 4.5);
   scene.add(key);
 
-  const goldRim = new THREE.PointLight(C.goldLt, 34, 20);   // gold edge on the glass
-  goldRim.position.set(3.6, 0.8, -2.6);
-  scene.add(goldRim);
+  const rim = new THREE.PointLight(C.brandLt, 36, 20);      // blue edge on the glass
+  rim.position.set(3.6, 0.8, -2.6);
+  scene.add(rim);
 
-  const coolFill = new THREE.PointLight(0x6f9ec4, 22, 22);  // cool separation
+  const coolFill = new THREE.PointLight(0x6f9ec4, 22, 22);  // separation
   coolFill.position.set(-4.4, -1.2, 2.2);
   scene.add(coolFill);
 
-  const under = new THREE.PointLight(C.aqua, 12, 14);       // faint water glow
+  const under = new THREE.PointLight(C.brand, 16, 14);      // water glow from below
   under.position.set(0, -3, 1.5);
   scene.add(under);
 
@@ -75,9 +78,9 @@ export function initScene(canvasHost) {
     specularIntensity: 1,
   });
 
-  // water: pale, expensive-looking, not swimming-pool blue
+  // water: pale brand tint, still expensive-looking
   const waterMat = new THREE.MeshPhysicalMaterial({
-    color: 0xbfe8f2,
+    color: 0xbfe4f5,
     metalness: 0,
     roughness: 0.1,
     transmission: 0.9,
@@ -88,10 +91,10 @@ export function initScene(canvasHost) {
     envMapIntensity: 1.5,
   });
 
-  // brushed champagne-gold closure
+  // polished steel-blue closure
   const capMat = new THREE.MeshStandardMaterial({
-    color: C.gold, metalness: 0.95, roughness: 0.28,
-    envMapIntensity: 1.7,
+    color: 0x9fb6c6, metalness: 0.95, roughness: 0.26,
+    envMapIntensity: 1.8,
   });
 
   // slender flute silhouette with a soft shoulder, revolved
@@ -134,7 +137,7 @@ export function initScene(canvasHost) {
   collar.position.y = 2.33;
   bottle.add(collar);
 
-  /* ---- label: deep ink band with gold type, drawn on a canvas ---- */
+  /* ---- label: deep ink band carrying the real logo ---- */
   const labelMat = new THREE.MeshStandardMaterial({
     map: labelTexture(),
     color: 0xffffff,
@@ -151,10 +154,17 @@ export function initScene(canvasHost) {
   label.position.y = -0.22;
   bottle.add(label);
 
-  // gold hairlines framing the label
+  // the logo is loaded asynchronously, then painted into the same texture
+  loadLogo().then((img) => {
+    if (!img) return;
+    labelMat.map = labelTexture(img);
+    labelMat.needsUpdate = true;
+  });
+
+  // brand-blue hairlines framing the label
   const hairMat = new THREE.MeshStandardMaterial({
-    color: C.goldLt, metalness: 1, roughness: 0.22,
-    emissive: C.gold, emissiveIntensity: 0.35, envMapIntensity: 2,
+    color: C.brandLt, metalness: 1, roughness: 0.22,
+    emissive: C.brand, emissiveIntensity: 0.35, envMapIntensity: 2,
   });
   const hairTop = new THREE.Mesh(new THREE.TorusGeometry(0.678, 0.0075, 8, 96), hairMat);
   hairTop.rotation.x = Math.PI / 2;
@@ -211,7 +221,7 @@ export function initScene(canvasHost) {
   // faint pool of light under the bottle
   const pool = new THREE.Mesh(
     new THREE.CircleGeometry(2.6, 64),
-    new THREE.MeshBasicMaterial({ color: C.gold, transparent: true, opacity: 0.05 })
+    new THREE.MeshBasicMaterial({ color: C.brand, transparent: true, opacity: 0.07 })
   );
   pool.rotation.x = -Math.PI / 2;
   pool.position.set(0, -2.44, 0);
@@ -291,14 +301,14 @@ export function initScene(canvasHost) {
     bottle.position.y = restY() + Math.sin(t * 0.55) * 0.07 + scrollN * 1.5;
     bottle.scale.setScalar(1 - Math.min(scrollN, 1) * 0.1);
 
-    // the gold hairlines breathe very slightly
+    // the label hairlines breathe very slightly
     const glow = 0.28 + Math.sin(t * 1.1) * 0.14;
     hairMat.emissiveIntensity = glow;
 
     // floor and light pool follow the bottle
     floor.position.y = -2.46 + scrollN * 1.5;
     pool.position.set(bottle.position.x, floor.position.y + 0.02, 0);
-    pool.material.opacity = 0.05 + Math.sin(t * 0.8) * 0.012;
+    pool.material.opacity = 0.07 + Math.sin(t * 0.8) * 0.014;
 
     camera.position.x = eased.x * 0.55;
     camera.position.y = 0.3 - eased.y * 0.38;
@@ -325,10 +335,26 @@ export function initScene(canvasHost) {
 }
 
 /* ---------------------------------------------------------------
-   Label artwork, generated at runtime: deep ink ground, gold rules,
-   and the brand name set wide. Repeats three times around the bottle.
+   Load the logo for the bottle label. The full lockup is preferred
+   here — a real label carries the name, not just the emblem.
+   Resolves to null on failure so the label falls back to type.
    --------------------------------------------------------------- */
-function labelTexture() {
+function loadLogo() {
+  return new Promise((resolve) => {
+    const src = BRAND.logo || BRAND.logoMark;
+    if (!src) return resolve(null);
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+/* ---------------------------------------------------------------
+   Label artwork, generated at runtime: deep ink ground, brand rules,
+   the logo where available. Repeats three times around the bottle.
+   --------------------------------------------------------------- */
+function labelTexture(logo) {
   const W = 1024, H = 512;
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
@@ -345,33 +371,40 @@ function labelTexture() {
   // three identical panels around the circumference
   const P = W / 3;
   for (let i = 0; i < 3; i++) {
-    const x0 = i * P;
     g.save();
-    g.translate(x0, 0);
+    g.translate(i * P, 0);
 
-    // gold rules
-    g.strokeStyle = 'rgba(203,176,131,.55)';
+    // brand rules
+    g.strokeStyle = 'rgba(86,188,232,.5)';
     g.lineWidth = 2;
-    g.beginPath(); g.moveTo(P * 0.16, H * 0.3); g.lineTo(P * 0.84, H * 0.3); g.stroke();
-    g.beginPath(); g.moveTo(P * 0.16, H * 0.72); g.lineTo(P * 0.84, H * 0.72); g.stroke();
+    g.beginPath(); g.moveTo(P * 0.16, H * 0.26); g.lineTo(P * 0.84, H * 0.26); g.stroke();
+    g.beginPath(); g.moveTo(P * 0.16, H * 0.76); g.lineTo(P * 0.84, H * 0.76); g.stroke();
 
-    // brand name
-    g.fillStyle = '#e8d7b4';
+    if (logo) {
+      // the real lockup, fitted inside the rules and given a little
+      // brightness so it holds up against the dark label ground
+      const maxW = P * 0.70, maxH = H * 0.40;
+      const s = Math.min(maxW / logo.width, maxH / logo.height);
+      const w = logo.width * s, h = logo.height * s;
+      g.save();
+      g.filter = 'brightness(1.35) saturate(1.15)';
+      g.drawImage(logo, (P - w) / 2, H * 0.47 - h / 2, w, h);
+      g.restore();
+    } else {
+      // fallback: set the name in type
+      g.fillStyle = '#d8ecf7';
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      g.font = '300 74px Georgia, "Times New Roman", serif';
+      g.fillText('AQUA NIYOR', P / 2, H * 0.47);
+    }
+
+    // origin line beneath
+    g.fillStyle = 'rgba(223,231,239,.58)';
     g.textAlign = 'center';
     g.textBaseline = 'middle';
-    g.font = '300 76px Georgia, "Times New Roman", serif';
-    g.fillText('AQUA NIYOR', P / 2, H * 0.5);
-
-    // small caps line beneath
-    g.fillStyle = 'rgba(223,231,239,.6)';
-    g.font = '400 26px Helvetica, Arial, sans-serif';
-    g.fillText('N  A  G  A  O  N   ·   A  S  S  A  M', P / 2, H * 0.615);
-
-    // drop mark above
-    g.fillStyle = 'rgba(127,212,232,.75)';
-    g.beginPath();
-    g.ellipse(P / 2, H * 0.185, 13, 20, 0, 0, Math.PI * 2);
-    g.fill();
+    g.font = '400 24px Helvetica, Arial, sans-serif';
+    g.fillText('N  A  G  A  O  N   ·   A  S  S  A  M', P / 2, H * 0.665);
 
     g.restore();
   }
@@ -383,8 +416,8 @@ function labelTexture() {
   return tex;
 }
 
-/* A dark studio: two soft boxes (one warm, one cool) on near-black,
-   which is what gives the glass its long specular streaks. */
+/* A dark studio: two soft boxes on near-black, which is what gives
+   the glass its long specular streaks. */
 function studioEnv() {
   const s = new THREE.Scene();
   const mat = new THREE.ShaderMaterial({
@@ -397,18 +430,18 @@ function studioEnv() {
         float h = d.y * 0.5 + 0.5;
 
         // near-black gradient ground
-        vec3 c = mix(vec3(0.006,0.010,0.020), vec3(0.045,0.062,0.095), pow(h, 1.4));
+        vec3 c = mix(vec3(0.006,0.010,0.020), vec3(0.042,0.060,0.095), pow(h, 1.4));
 
-        // warm softbox, upper right
-        float warm = smoothstep(0.55, 1.0, dot(d, normalize(vec3(0.6, 0.75, 0.3))));
-        c += vec3(1.0, 0.88, 0.68) * warm * 1.5;
+        // main softbox, upper right — neutral white
+        float mainL = smoothstep(0.55, 1.0, dot(d, normalize(vec3(0.6, 0.75, 0.3))));
+        c += vec3(0.95, 0.98, 1.0) * mainL * 1.45;
 
-        // cool softbox, left
-        float cool = smoothstep(0.68, 1.0, dot(d, normalize(vec3(-0.85, 0.2, 0.35))));
-        c += vec3(0.62, 0.78, 0.95) * cool * 0.7;
+        // brand-blue softbox, left
+        float blue = smoothstep(0.68, 1.0, dot(d, normalize(vec3(-0.85, 0.2, 0.35))));
+        c += vec3(0.15, 0.55, 0.82) * blue * 0.9;
 
         // thin horizon line, reads as a room edge in the reflections
-        c += vec3(0.7,0.62,0.5) * smoothstep(0.02, 0.0, abs(d.y - 0.02)) * 0.35;
+        c += vec3(0.55,0.70,0.82) * smoothstep(0.02, 0.0, abs(d.y - 0.02)) * 0.35;
 
         gl_FragColor = vec4(c, 1.0);
       }`,

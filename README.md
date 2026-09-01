@@ -18,15 +18,17 @@ uses ES modules, which browsers block on `file://`.
 
 Everything business-related lives in one file: `js/config.js`.
 
-**Logo** — drop your file into `assets/` and point `BRAND.logo` at it:
+**Logo** — your artwork is already in place, keyed off its white background
+into transparent PNGs:
 
 ```js
-logo: 'assets/logo.png',   // currently a placeholder gold droplet
+logo:     'assets/logo.png',       // full lockup — header, bottle label
+logoMark: 'assets/logo-mark.png',  // droplet alone — favicon, loader, footer
 ```
 
-It feeds the header, the loading screen and the browser tab. The 3D bottle's
-label is drawn in code (`labelTexture()` in `js/scene.js`) — once your real
-logo arrives it can be painted onto that label too.
+Both were cut from `assets/photo_2026-09-01_16-16-30.jpg` (kept as the
+original). If you get a vector version later, drop the SVG into `assets/` and
+repoint these two lines — nothing else needs touching.
 
 **Prices** — edit the `slabs` arrays. Current rates, per crate:
 
@@ -56,13 +58,18 @@ sheet or emailing them automatically would need a small backend added.
 ## The look
 
 A "still water" treatment: near-black indigo ground, hairline rules,
-champagne-gold accents, Cormorant Garamond display type over Jost, and a fine
-film grain. Motion is deliberately slow — long easings, a 1.1s reveal.
+Cormorant Garamond display type over Jost, and a fine film grain. Motion is
+deliberately slow — long easings, a 1.1s reveal.
 
-The hero is a three.js scene: a crystal bottle with a gold closure and a
-gold-ruled label on a dark reflective stage, lit by a warm key and a cool fill.
-It rotates slowly, tilts toward the cursor, spins further when dragged, and
-lifts as you scroll. Without WebGL it falls back to a static gradient.
+The accent is `#0289ca`, sampled directly from the logo artwork, and it is the
+only accent — set once as `--brand` in `css/style.css` (with `--brand-lt` and
+`--brand-dp` derived from it) and mirrored in `js/scene.js`.
+
+The hero is a three.js scene: a crystal bottle with a steel-blue closure and a
+dark label carrying your logo, standing on a reflective stage lit by a white
+key and a blue softbox. It rotates slowly, tilts toward the cursor, spins
+further when dragged, and lifts as you scroll. Without WebGL it falls back to a
+static gradient.
 
 ## Files
 
@@ -73,7 +80,8 @@ js/config.js      brand details + pricing  ← edit this
 js/main.js        rendering, live quotation, WhatsApp message
 js/scene.js       the 3D hero (three.js) + label artwork
 vendor/three.js   pinned three.js r169
-assets/logo.svg   placeholder logo
+assets/logo.png   full lockup, transparent
+assets/logo-mark.png  droplet only, transparent
 ```
 
 ## Deploying
@@ -84,12 +92,12 @@ needed.
 
 ## Picking this up later
 
-Done so far: full page, premium theme, 3D hero, live quotation with all eight
-rate slabs, WhatsApp ordering, mobile layout.
+Done so far: full page, premium theme in the brand blue, real logo wired
+through (header, favicon, loader, footer and the 3D bottle label), 3D hero,
+live quotation with all eight rate slabs, WhatsApp ordering, mobile layout.
 
 Open items:
 
-- Replace the placeholder logo, and paint the real mark on the 3D bottle label.
 - Confirm delivery radius wording and any minimum order.
 - Optional: photographs of the plant for the Purity section.
 - Optional: a backend if orders should also be logged or emailed.

@@ -36,7 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ---------------- brand plumbing ---------------- */
 function applyBrand() {
-  $$('#brandLogo, #loader img').forEach((img) => { img.src = BRAND.logo; });
+  // header carries the full lockup; loader and footer use the mark alone
+  const mark = BRAND.logoMark || BRAND.logo;
+  const brandImg = $('#brandLogo');
+  brandImg.src = BRAND.logo;
+  brandImg.alt = BRAND.name;
+  $$('#loader img, .foot-logo').forEach((img) => { img.src = mark; });
   $('#yr').textContent = new Date().getFullYear();
   $('#callBtn').href = `tel:${BRAND.phoneDial}`;
 
@@ -135,10 +140,14 @@ function wireReveal() {
     entries.forEach((en) => {
       if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -50px' });
+  }, { threshold: 0.04, rootMargin: '0px 0px -40px' });
+
   $$('.reveal').forEach((el, i) => {
-    // gentle stagger — slower and more even than a snappy UI would use
-    el.style.transitionDelay = `${Math.min(i % 5, 4) * 110}ms`;
+    // A panel taller than the viewport can never reach a high intersection
+    // ratio, and staggering it only delays content the visitor is already
+    // looking at — so tall elements reveal immediately and undelayed.
+    const tall = el.getBoundingClientRect().height > window.innerHeight * 0.8;
+    el.style.transitionDelay = tall ? '0ms' : `${Math.min(i % 5, 4) * 110}ms`;
     io.observe(el);
   });
 }
@@ -315,7 +324,7 @@ function flash(el) {
   if (!el) return;
   const prev = el.style.borderBottomColor;
   el.style.transition = 'border-color .35s ease';
-  el.style.borderBottomColor = '#cbb083';
+  el.style.borderBottomColor = '#0289ca';
   setTimeout(() => { el.style.borderBottomColor = prev; }, 750);
 }
 
@@ -332,7 +341,7 @@ function toast(msg) {
 /* ---------------- fallback backdrop (no WebGL) ---------------- */
 function staticBackdrop() {
   $('#scene').style.background =
-    'radial-gradient(56% 58% at 74% 40%, rgba(203,176,131,.16), transparent 68%),' +
-    'radial-gradient(44% 48% at 22% 66%, rgba(127,212,232,.10), transparent 72%),' +
+    'radial-gradient(56% 58% at 74% 40%, rgba(2,137,202,.20), transparent 68%),' +
+    'radial-gradient(44% 48% at 22% 66%, rgba(86,188,232,.10), transparent 72%),' +
     'linear-gradient(168deg, #0b1220, #05070d 72%)';
 }
