@@ -8,3 +8,5 @@
 # logs / temp
 *.log
 tmp/
+.vercel
+.env*

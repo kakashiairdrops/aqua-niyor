@@ -84,11 +84,26 @@ assets/logo.png   full lockup, transparent
 assets/logo-mark.png  droplet only, transparent
 ```
 
-## Deploying
+## Live site
 
-Upload the whole `aqua-niyor` folder to any static host — Netlify, Vercel,
-Cloudflare Pages, GitHub Pages or ordinary cPanel hosting. No configuration
-needed.
+**https://aquaniyor.vercel.app**
+
+Hosted on Vercel, connected to `github.com/kakashiairdrops/aqua-niyor`. Pushing
+to `main` redeploys automatically:
+
+```bash
+git add -A && git commit -m "your change" && git push
+```
+
+To deploy by hand instead: `vercel --prod` from this folder.
+
+A second copy also runs on GitHub Pages at
+https://kakashiairdrops.github.io/aqua-niyor/ — harmless to keep as a backup,
+or turn it off in the repo's Settings → Pages.
+
+`vercel.json` holds the hosting rules: clean URLs, security headers, and cache
+policy (three.js pinned for a year, HTML always revalidated). There is no build
+step — the files are served exactly as they are.
 
 ## Picking this up later
 
