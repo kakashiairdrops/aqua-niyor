@@ -4,19 +4,19 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Aqua Niyor — Packaged Drinking Water, Nagaon | Book Crates Online</title>
-<meta name="description" content="Aqua Niyor packaged drinking water from Nagaon, Assam. 500 ml and 700 ml bottles, wholesale crate rates from ₹108, book online and confirm instantly on WhatsApp." />
+<meta name="description" content="Aqua Niyor packaged drinking water from Nagaon, Assam. 500 ml and 750 ml bottles, wholesale crate rates from ₹120, book online and confirm instantly on WhatsApp." />
 <meta name="theme-color" content="#05070d" />
 <link rel="icon" href="assets/logo-mark.png" type="image/png" />
 <link rel="apple-touch-icon" href="assets/logo-mark.png" />
 
 <meta property="og:title" content="Aqua Niyor — Packaged Drinking Water, Nagaon" />
-<meta property="og:description" content="500 ml & 700 ml bottles. Bulk crate rates. Book online, confirm on WhatsApp." />
+<meta property="og:description" content="500 ml &amp; 750 ml bottles. Bulk crate rates. Book online, confirm on WhatsApp." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="assets/logo.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
 
 <script type="application/ld+json">
@@ -24,12 +24,12 @@
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Aqua Niyor",
-  "description": "Packaged drinking water from Nagaon, Assam. 500 ml and 700 ml bottles supplied by the crate.",
+  "description": "Packaged drinking water from Nagaon, Assam. 500 ml and 750 ml bottles supplied by the crate.",
   "telephone": "+919101033546",
   "email": "debashreeaqua@gmail.com",
   "address": { "@type": "PostalAddress", "addressLocality": "Nagaon", "addressRegion": "Assam", "addressCountry": "IN" },
   "areaServed": "Nagaon, Assam",
-  "priceRange": "₹108–₹130 per crate"
+  "priceRange": "₹120–₹130 per crate"
 }
 </script>
 
@@ -70,7 +70,7 @@
     <div class="eyebrow"><span class="dot"></span> Seven-stage purification · Nagaon, Assam</div>
     <h1>Purity, <em class="grad">bottled quietly.</em></h1>
     <p class="lede">
-      Aqua Niyor draws from a protected source in Nagaon and bottles it in 500 ml and 700 ml —
+      Aqua Niyor draws from a protected source in Nagaon and bottles it in 500 ml and 750 ml —
       supplied by the crate to the shops, hotels and celebrations of Assam. Compose your
       quotation below; it reaches us on WhatsApp the moment you are ready.
     </p>
@@ -82,7 +82,7 @@
       <a class="btn btn-ghost" href="#products">View the collection</a>
     </div>
     <div class="hero-stats">
-      <div><strong id="stat1">₹108</strong><span>from, per crate</span></div>
+      <div><strong id="stat1">₹120</strong><span>from, per crate</span></div>
       <div><strong id="stat2">7</strong><span>stages of purification</span></div>
       <div><strong id="stat3">24</strong><span>bottles to a crate</span></div>
     </div>
@@ -98,7 +98,7 @@
     <div class="sec-head reveal">
       <div class="sec-tag">The collection</div>
       <h2>Two sizes, <em>one standard.</em></h2>
-      <p>The same source, the same testing, the same seal. Choose the format your table calls for — the rate eases as the order grows.</p>
+      <p>The same source, the same testing, the same seal. Choose the size you need — order more than 50 crates and the rate drops.</p>
     </div>
     <div class="prod-grid" id="prodGrid"><!-- injected --></div>
   </div>
@@ -132,26 +132,52 @@
     <div class="quote-grid">
       <!-- ---- form ---- -->
       <form class="card reveal" id="orderForm" novalidate>
-        <div class="field">
-          <label>Bottle size</label>
-          <div class="seg" id="sizeSeg"><!-- injected --></div>
+        <!-- step 1: which bottle -->
+        <div class="picker">
+          <div class="pick-head">
+            <span class="pick-num" aria-hidden="true">1</span>
+            <div>
+              <h3>Choose your bottle size</h3>
+              <p>Both sizes, 24 bottles to a crate.</p>
+            </div>
+          </div>
+          <div class="seg" id="sizeSeg" role="radiogroup" aria-label="Bottle size"><!-- injected --></div>
         </div>
 
-        <div class="field">
-          <label for="crates">Quantity in crates</label>
+        <!-- step 2: how many -->
+        <div class="picker">
+          <div class="pick-head">
+            <span class="pick-num" aria-hidden="true">2</span>
+            <div>
+              <h3>How many crates?</h3>
+              <p>Over 50 crates gets the bulk rate.</p>
+            </div>
+          </div>
           <div class="stepper">
             <button type="button" id="minus" aria-label="Fewer crates">−</button>
-            <input class="input" type="number" id="crates" name="crates" min="1" max="5000" step="1" value="30" inputmode="numeric" />
+            <input class="input" type="number" id="crates" name="crates" min="1" max="5000" step="1" value="30" inputmode="numeric" aria-label="Number of crates" />
             <button type="button" id="plus" aria-label="More crates">+</button>
           </div>
+          <p class="quick-lbl">Or pick a common quantity:</p>
           <div class="quick">
             <button type="button" data-q="10">10</button>
-            <button type="button" data-q="30">30</button>
+            <button type="button" data-q="25">25</button>
             <button type="button" data-q="50">50</button>
+            <button type="button" data-q="75">75</button>
             <button type="button" data-q="100">100</button>
-            <button type="button" data-q="150">150</button>
+            <button type="button" data-q="200">200</button>
           </div>
           <p class="err" id="cratesErr">Enter at least 1 crate.</p>
+          <p class="pick-rate" id="pickRate"><!-- injected --></p>
+        </div>
+
+        <!-- step 3: who and where -->
+        <div class="pick-head" style="margin: 30px 0 20px">
+          <span class="pick-num" aria-hidden="true">3</span>
+          <div>
+            <h3>Your details</h3>
+            <p>So we can confirm stock and delivery.</p>
+          </div>
         </div>
 
         <div class="field row-2">
@@ -211,7 +237,7 @@
           <div class="sec-tag">Your quotation</div>
           <span class="chip" id="slabChip">30–50 crates</span>
         </div>
-        <div class="sum-total" id="total">₹3,600<small id="totalSub">30 crates · 700 ml</small></div>
+        <div class="sum-total" id="total">₹3,600<small id="totalSub">30 crates · 750 ml</small></div>
 
         <ul class="sum-list" id="sumList"><!-- injected --></ul>
 

@@ -395,7 +395,7 @@ function labelTexture(logo) {
       g.fillStyle = '#d8ecf7';
       g.textAlign = 'center';
       g.textBaseline = 'middle';
-      g.font = '300 74px Georgia, "Times New Roman", serif';
+      g.font = '700 68px Helvetica, Arial, sans-serif';
       g.fillText('AQUA NIYOR', P / 2, H * 0.47);
     }
 

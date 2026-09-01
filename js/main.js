@@ -95,13 +95,15 @@ function renderProcess() {
 }
 
 function renderSizeChoices() {
-  $('#sizeSeg').innerHTML = PRODUCTS.map((p) => `
+  $('#sizeSeg').innerHTML = PRODUCTS.map((p) => {
+    const std = p.slabs[0], bulk = p.slabs[p.slabs.length - 1];
+    return `
     <label>
       <input type="radio" name="size" value="${p.id}" ${p.id === DEFAULT_SIZE ? 'checked' : ''} />
       <b>${p.label}</b>
-      <span>from ${inr(p.slabs[p.slabs.length - 1].rate)} a crate</span>
-    </label>
-  `).join('');
+      <span>${inr(std.rate)} a crate<br />${inr(bulk.rate)} over ${std.max}</span>
+    </label>`;
+  }).join('');
   $$('input[name="size"]').forEach((r) => r.addEventListener('change', update));
 }
 
@@ -181,6 +183,12 @@ function update() {
   $('#total').firstChild.nodeValue = inr(total);
   $('#totalSub').textContent = `${safe} crate${safe > 1 ? 's' : ''} · ${product.label}`;
 
+  // the running figure, restated where the choices are actually made
+  $('#pickRate').innerHTML =
+    `<b>${safe} × ${product.label}</b>` +
+    `<span>at ${inr(rate)} per crate =</span>` +
+    `<b>${inr(total)}</b>`;
+
   $('#sumList').innerHTML = `
     <li><span>Product</span><b>${product.name}</b></li>
     <li><span>Crates</span><b>${safe}</b></li>
@@ -189,28 +197,27 @@ function update() {
     <li><span>Estimated total</span><b>${inr(total)}</b></li>
   `;
 
-  // savings against the 1-crate rate
+  // savings against the standard rate
   const base = baseRate(size);
   const saved = (base - rate) * safe;
   const note = $('#saveNote');
+  note.hidden = false;
   if (saved > 0) {
-    note.hidden = false;
-    note.textContent = `Bulk rate applied — ${inr(saved)} below the ${inr(base)} single-crate rate.`;
+    note.textContent = `Bulk rate applied — you save ${inr(saved)} against the ${inr(base)} standard rate.`;
   } else {
-    const first = product.slabs[1];
-    note.hidden = false;
-    note.textContent = first
-      ? `Standard rate ${inr(base)} per crate. At ${first.min} crates it eases to ${inr(first.rate)}.`
+    const bulk = product.slabs[1];
+    note.textContent = bulk
+      ? `Standard rate ${inr(base)} per crate. Order over ${product.slabs[0].max} crates and it drops to ${inr(bulk.rate)}.`
       : `Standard rate ${inr(base)} per crate.`;
   }
 
-  // nudge toward the next slab
+  // nudge toward the bulk rate
   const nextSlab = product.slabs.find((s) => s.min > safe);
   const nx = $('#nextSlab');
   if (nextSlab) {
     const need = nextSlab.min - safe;
     nx.hidden = false;
-    nx.textContent = `${need} crate${need > 1 ? 's' : ''} more — ${nextSlab.min} in total — brings the rate to ${inr(nextSlab.rate)}.`;
+    nx.textContent = `Add ${need} more crate${need > 1 ? 's' : ''} — ${nextSlab.min} in total — and the rate drops to ${inr(nextSlab.rate)} per crate.`;
   } else {
     nx.hidden = true;
   }
@@ -322,10 +329,11 @@ function validate() {
 
 function flash(el) {
   if (!el) return;
-  const prev = el.style.borderBottomColor;
+  // inputs carry a full border now, so flash the whole ring
+  const prev = el.style.borderColor;
   el.style.transition = 'border-color .35s ease';
-  el.style.borderBottomColor = '#0289ca';
-  setTimeout(() => { el.style.borderBottomColor = prev; }, 750);
+  el.style.borderColor = '#56bce8';
+  setTimeout(() => { el.style.borderColor = prev; }, 750);
 }
 
 /* ---------------- toast ---------------- */

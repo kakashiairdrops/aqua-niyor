@@ -28,10 +28,11 @@ export const BRAND = {
 
 /* Products ------------------------------------------------------
    An ORDERED array — display order is exactly this order.
-   (A plain object keyed by "500"/"700" would get silently
+   (A plain object keyed by "500"/"750" would get silently
    re-sorted numerically by the JS engine.)
-   bottlesPerCrate is used only for the "x bottles" line in the
-   quotation — change it to your real packing count.            */
+
+   Pricing is two brackets per size: up to 50 crates, and 51 or
+   more. To change a rate, edit the number and nothing else.     */
 export const PRODUCTS = [
   {
     id: '500',
@@ -40,31 +41,27 @@ export const PRODUCTS = [
     blurb: 'The slender format. Laid at each place setting, carried through meetings, handed out at gatherings.',
     bottlesPerCrate: 24,
     slabs: [
-      { min: 1,   max: 29,       rate: 125 },
-      { min: 30,  max: 50,       rate: 115 },
-      { min: 51,  max: 120,      rate: 110 },
-      { min: 121, max: Infinity, rate: 108 },
+      { min: 1,  max: 50,       rate: 125 },
+      { min: 51, max: Infinity, rate: 120 },
     ],
   },
   {
-    id: '700',
-    label: '700 ml',
-    name: 'Aqua Niyor 700 ml',
+    id: '750',
+    label: '750 ml',
+    name: 'Aqua Niyor 750 ml',
     blurb: 'The everyday bottle. Sized for the counter, the office desk and the long afternoon.',
     bottlesPerCrate: 24,
     slabs: [
-      { min: 1,   max: 29,       rate: 130 },
-      { min: 30,  max: 50,       rate: 120 },
-      { min: 51,  max: 120,      rate: 115 },
-      { min: 121, max: Infinity, rate: 112 },
+      { min: 1,  max: 50,       rate: 130 },
+      { min: 51, max: Infinity, rate: 125 },
     ],
   },
 ];
 
 /** Which size the booking form starts on. */
-export const DEFAULT_SIZE = '700';
+export const DEFAULT_SIZE = '750';
 
-/** Look up a product by its id ('500' | '700'). */
+/** Look up a product by its id ('500' | '750'). */
 export function getProduct(id) {
   return PRODUCTS.find((p) => p.id === String(id)) || PRODUCTS[0];
 }
@@ -104,7 +101,7 @@ export function lowestRate() {
 }
 
 export function slabLabel(slab) {
-  return slab.max === Infinity ? `${slab.min}+ crates` : `${slab.min}–${slab.max} crates`;
+  return slab.max === Infinity ? `Over ${slab.min - 1} crates` : `${slab.min}–${slab.max} crates`;
 }
 
 export const inr = (n) =>

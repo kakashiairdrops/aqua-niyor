@@ -30,14 +30,12 @@ Both were cut from `assets/photo_2026-09-01_16-16-30.jpg` (kept as the
 original). If you get a vector version later, drop the SVG into `assets/` and
 repoint these two lines — nothing else needs touching.
 
-**Prices** — edit the `slabs` arrays. Current rates, per crate:
+**Prices** — edit the `slabs` arrays. Two brackets per size, per crate:
 
-| Crates | 500 ml | 700 ml |
+| Crates | 500 ml | 750 ml |
 | --- | --- | --- |
-| 1–29 | ₹125 | ₹130 |
-| 30–50 | ₹115 | ₹120 |
-| 51–120 | ₹110 | ₹115 |
-| 121+ | ₹108 | ₹112 |
+| 1–50 | ₹125 | ₹130 |
+| Over 50 | ₹120 | ₹125 |
 
 Both sizes pack **24 bottles to a crate** (`bottlesPerCrate`).
 
@@ -57,9 +55,10 @@ sheet or emailing them automatically would need a small backend added.
 
 ## The look
 
-A "still water" treatment: near-black indigo ground, hairline rules,
-Cormorant Garamond display type over Jost, and a fine film grain. Motion is
-deliberately slow — long easings, a 1.1s reveal.
+Deep indigo ground with a very light film grain. Type is **Inter** for text and
+**Outfit** for headings — both plain, wide-apertured sans faces chosen for
+readability at a glance rather than for style. Body text is 17px at weight 400;
+headings are bold rather than thin. Motion is quick: a 0.7s reveal, 0.3s hovers.
 
 The accent is `#0289ca`, sampled directly from the logo artwork, and it is the
 only accent — set once as `--brand` in `css/style.css` (with `--brand-lt` and
@@ -70,6 +69,16 @@ dark label carrying your logo, standing on a reflective stage lit by a white
 key and a blue softbox. It rotates slowly, tilts toward the cursor, spins
 further when dragged, and lifts as you scroll. Without WebGL it falls back to a
 static gradient.
+
+## The booking form
+
+Three numbered steps, so nothing is ambiguous:
+
+1. **Bottle size** — two large cards showing both rates; the chosen one is
+   outlined in blue and ticked.
+2. **How many crates** — a big −/+ stepper, six one-tap quantities, and a line
+   restating the running total right where the choices are made.
+3. **Your details** — name, phone, use, date, address, notes.
 
 ## Files
 
